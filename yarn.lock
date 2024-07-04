@@ -19,10 +19,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@adraffy/ens-normalize@npm:1.10.1":
-  version: 1.10.1
-  resolution: "@adraffy/ens-normalize@npm:1.10.1"
-  checksum: 0836f394ea256972ec19a0b5e78cb7f5bcdfd48d8a32c7478afc94dd53ae44c04d1aa2303d7f3077b4f3ac2323b1f557ab9188e8059978748fdcd83e04a80dcc
+"@adraffy/ens-normalize@npm:1.9.0":
+  version: 1.9.0
+  resolution: "@adraffy/ens-normalize@npm:1.9.0"
+  checksum: a8d47f85db7a0bba01227fae8781a3245a4517875503d6848a47ca29e7f7da271742a2f93b55afc1b9201e74eda1fd1f1e6e79e70f967359fd7f6ec3d45bf243
   languageName: node
   linkType: hard
 
@@ -378,11 +378,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ensdomains/ensjs@npm:^3.7.0":
-  version: 3.7.0
-  resolution: "@ensdomains/ensjs@npm:3.7.0"
+"@ensdomains/ensjs@npm:3.5.0-beta.2":
+  version: 3.5.0-beta.2
+  resolution: "@ensdomains/ensjs@npm:3.5.0-beta.2"
   dependencies:
-    "@adraffy/ens-normalize": 1.10.1
+    "@adraffy/ens-normalize": 1.9.0
     "@ensdomains/address-encoder": 1.1.1
     "@ensdomains/content-hash": 3.1.0-rc.1
     "@ensdomains/dnsprovejs": ^0.5.1
@@ -393,8 +393,8 @@ __metadata:
     pako: ^2.1.0
     traverse: ^0.6.8
   peerDependencies:
-    viem: ^2.9.2
-  checksum: 38db9b33c1767b5dfa8109485111b3988910879b8a820ebac805fb161d54b1503fc04151ec469fa962619660aef9312b09ed7c5852ccde8c3f4e52bef35eddc1
+    viem: ^2.5.0
+  checksum: a91e23a3a65e41904a8d17a4dc6f17ca16c63e6b12e86101e1a7ea9621b70aa31b4e672edd16a89988f327b7b0d06a840148912fc9d4a841a4e972bc25d44aa8
   languageName: node
   linkType: hard
 
@@ -1481,11 +1481,11 @@ __metadata:
   linkType: hard
 
 "@noble/curves@npm:^1.2.0":
-  version: 1.4.0
-  resolution: "@noble/curves@npm:1.4.0"
+  version: 1.4.2
+  resolution: "@noble/curves@npm:1.4.2"
   dependencies:
     "@noble/hashes": 1.4.0
-  checksum: 0014ff561d16e98da4a57e2310a4015e4bdab3b1e1eafcd18d3f9b955c29c3501452ca5d702fddf8ca92d570bbeadfbe53fe16ebbd81a319c414f739154bb26b
+  checksum: c475a83c4263e2c970eaba728895b9b5d67e0ca880651e9c6e3efdc5f6a4f07ceb5b043bf71c399fc80fada0b8706e69d0772bffdd7b9de2483b988973a34cba
   languageName: node
   linkType: hard
 
@@ -2250,7 +2250,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@se-2/nextjs@workspace:packages/nextjs"
   dependencies:
-    "@ensdomains/ensjs": ^3.7.0
+    "@ensdomains/ensjs": 3.5.0-beta.2
     "@heroicons/react": ^2.0.11
     "@rainbow-me/rainbowkit": 2.1.2
     "@tanstack/react-query": ^5.28.6
@@ -3959,8 +3959,8 @@ __metadata:
   linkType: hard
 
 "abitype@npm:^1.0.0":
-  version: 1.0.4
-  resolution: "abitype@npm:1.0.4"
+  version: 1.0.5
+  resolution: "abitype@npm:1.0.5"
   peerDependencies:
     typescript: ">=5.0.4"
     zod: ^3 >=3.22.0
@@ -3969,7 +3969,7 @@ __metadata:
       optional: true
     zod:
       optional: true
-  checksum: 5fc4bc29e4be85b941497debc359104f48e50c0f423c4e3eb86ecfce504b5494bff166a796b70870ffa78970cba1fca133f9e3e3a20b2fd58b61e3f33d8dfee5
+  checksum: 4a4865926e5e8e33e4fab0081a106ce4f627db30b4052fbc449e4707aea6d34d805d46c8d6d0a72234bdd9a2b4900993591515fc299bc57d393181c70dc0c19e
   languageName: node
   linkType: hard
 
@@ -8466,9 +8466,9 @@ __metadata:
   linkType: hard
 
 "graphql@npm:^16.3.0":
-  version: 16.8.2
-  resolution: "graphql@npm:16.8.2"
-  checksum: 1a5ba8087b3ffb60627ab4b71565e77049f621da49144985d3b1e35a9c70bf846476a7b5912342eda72d70bd71f9427a3d73712b4250e0175d458b8011c9deba
+  version: 16.9.0
+  resolution: "graphql@npm:16.9.0"
+  checksum: 8cb3d54100e9227310383ce7f791ca48d12f15ed9f2021f23f8735f1121aafe4e5e611a853081dd935ce221724ea1ae4638faef5d2921fb1ad7c26b5f46611e9
   languageName: node
   linkType: hard
 
@@ -11301,9 +11301,9 @@ __metadata:
   linkType: hard
 
 "object-inspect@npm:^1.13.1":
-  version: 1.13.1
-  resolution: "object-inspect@npm:1.13.1"
-  checksum: 7d9fa9221de3311dcb5c7c307ee5dc011cdd31dc43624b7c184b3840514e118e05ef0002be5388304c416c0eb592feb46e983db12577fc47e47d5752fbbfb61f
+  version: 1.13.2
+  resolution: "object-inspect@npm:1.13.2"
+  checksum: 9f850b3c045db60e0e97746e809ee4090d6ce62195af17dd1e9438ac761394a7d8ec4f7906559aea5424eaf61e35d3e53feded2ccd5f62fcc7d9670d3c8eb353
   languageName: node
   linkType: hard
 

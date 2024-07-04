@@ -1,32 +1,7 @@
 import { SupportedChain } from "../constants/chains";
+import { ConfigWithEns, CreateQueryKey, QueryDependencyType } from "../types/types";
 import { Address } from "viem";
 import { useAccount, useChainId, useConfig } from "wagmi";
-import { wagmiConfig } from "~~/services/web3/wagmiConfig";
-
-export type QueryDependencyType = "standard" | "graph" | "independent";
-
-export type CreateQueryKey<
-  TParams extends {},
-  TFunctionName extends string,
-  TQueryDependencyType extends QueryDependencyType,
-> = TQueryDependencyType extends "graph"
-  ? readonly [
-      params: TParams,
-      chainId: SupportedChain["id"],
-      address: Address | undefined,
-      scopeKey: string | undefined,
-      functionName: TFunctionName,
-      graphKey: "graph",
-    ]
-  : readonly [
-      params: TParams,
-      chainId: TQueryDependencyType extends "independent" ? undefined : SupportedChain["id"],
-      address: TQueryDependencyType extends "independent" ? undefined : Address | undefined,
-      scopeKey: string | undefined,
-      functionName: TFunctionName,
-    ];
-
-type ConfigWithEns = typeof wagmiConfig;
 
 export type QueryKeyConfig<
   TParams extends {},

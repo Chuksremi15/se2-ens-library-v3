@@ -24,7 +24,6 @@ export const SearchResult = ({
 
   const handleClick = useCallback(() => {
     if (registrationStatus !== "short") {
-      console.log("124");
       clickCallback(input);
     }
   }, [input, clickCallback]);
@@ -67,7 +66,9 @@ export const SearchResult = ({
     );
   }
 
-  return <div className="w-[350px] bg-white h-[50px] rounded-lg shadow-sm p-3 flex items-center justify-between"></div>;
+  return (
+    <div className="w-[350px] bg-base-100 h-[50px] rounded-lg shadow-sm p-3 flex items-center justify-between"></div>
+  );
 };
 
 const StatusTag = ({ status }: { status: RegistrationStatus | undefined }) => {
