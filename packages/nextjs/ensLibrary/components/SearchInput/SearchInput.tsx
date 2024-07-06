@@ -71,7 +71,7 @@ export const SearchInput = () => {
     <div className="flex flex-col items-center gap-y-2">
       <div className="flex items-center w-[350px] relative">
         <input
-          className="input rounded-xl h-14 focus:outline-0 focus:border-blue-300 w-[350px] mx-auto  focus:text-lg  px-4 border   placeholder:text-lg  transition-all duration-300"
+          className="input rounded-xl h-14 focus:outline-0 focus:border-blue-300 w-[350px] mx-auto  focus:text-lg  pl-4 pr-12 border   placeholder:text-lg  transition-all duration-300"
           placeholder="Search for a name"
           value={inputVal}
           onChange={e => setInputVal(e.target.value)}

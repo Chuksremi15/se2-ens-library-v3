@@ -64,6 +64,7 @@ export const useBurnerWallet = (): BurnerAccount => {
   });
 
   const { targetNetwork } = useTargetNetwork();
+
   const publicClient = usePublicClient({ chainId: targetNetwork.id });
   const [walletClient, setWalletClient] = useState<WalletClient<HttpTransport, Chain, PrivateKeyAccount>>();
   const [generatedPrivateKey, setGeneratedPrivateKey] = useState<Hex>("0x");

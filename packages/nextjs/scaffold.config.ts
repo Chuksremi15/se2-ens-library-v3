@@ -1,4 +1,5 @@
 // import * as chains from "viem/chains";
+import { mainnet } from "viem/chains";
 import { goerliWithEns, holeskyWithEns, mainnetWithEns, sepoliaWithEns } from "~~/ensLibrary/constants/chains";
 
 const chains = [mainnetWithEns, goerliWithEns, sepoliaWithEns, holeskyWithEns] as const;

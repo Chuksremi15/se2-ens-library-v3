@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo } from "react";
 import { SearchItemType } from "./SearchInputTypes";
+import { useBasicName } from "~~/ensLibrary/hooks/useBasicName";
 import { RegistrationStatus } from "~~/ensLibrary/utils/registrationStatus";
 
 // import { useBasicName } from "~~/hooks/ens-hook/useBasicName";
@@ -28,11 +29,7 @@ export const SearchResult = ({
     }
   }, [input, clickCallback]);
 
-  //   const { registrationStatus, isLoading, beautifiedName } = useBasicName({ name: input });
-
-  const registrationStatus = "short";
-  const isLoading = false;
-  const beautifiedName = value;
+  const { registrationStatus, isLoading, beautifiedName } = useBasicName({ name: input });
 
   if (type === "error") {
     return (
@@ -51,7 +48,7 @@ export const SearchResult = ({
       >
         <div className="flex items-center gap-x-2">
           <div className="h-6 w-6 bg-blue-500 rounded-full" />
-          <p className=" font-medium text-base lowercase">{beautifiedName}</p>
+          <p className=" font-medium text-base lowercase  break-words max-w-[200px]">{beautifiedName}</p>
         </div>
         <div className="flex gap-x-2 items-center">
           {isLoading ? (
@@ -78,14 +75,14 @@ const StatusTag = ({ status }: { status: RegistrationStatus | undefined }) => {
     case "registered":
       return <StatusButtonWrapper bgColor={"bg-blue-100"} textColor={"text-blue-700"} status={status} />;
     case "gracePeriod":
-      return <div>{status}</div>;
+      return <StatusButtonWrapper bgColor={"bg-green-50"} textColor={"text-green-600"} status={"Grace period"} />;
     case "premium":
       return <div>{status}</div>;
     case "available":
       return <StatusButtonWrapper bgColor={"bg-green-50"} textColor={"text-green-600"} status={status} />;
     case "notOwned":
     case "notImported":
-      return <div> {status}</div>;
+      return <StatusButtonWrapper bgColor={"bg-red-100"} textColor={"text-red-700"} status={"Not imported"} />;
     case "short":
       return <StatusButtonWrapper bgColor={"bg-red-100"} textColor={"text-red-700"} status={status} />;
     default:
@@ -98,8 +95,8 @@ const StatusButtonWrapper = ({
   textColor,
   status,
 }: {
-  bgColor: String;
-  textColor: String;
+  bgColor?: String;
+  textColor?: String;
   status: String;
 }) => {
   return (
