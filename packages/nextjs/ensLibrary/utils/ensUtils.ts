@@ -132,3 +132,7 @@ export const createDateAndValue = <TValue extends bigint | number>(value: TValue
   date: new Date(Number(value)),
   value,
 });
+
+export function isEmpty(obj: object) {
+  return Object.keys(obj).length === 0;
+}

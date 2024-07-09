@@ -23,13 +23,13 @@ export const SearchResult = ({
     return value;
   }, [type, value]);
 
+  const { registrationStatus, isLoading, beautifiedName } = useBasicName({ name: input });
+
   const handleClick = useCallback(() => {
     if (registrationStatus !== "short") {
       clickCallback(input);
     }
   }, [input, clickCallback]);
-
-  const { registrationStatus, isLoading, beautifiedName } = useBasicName({ name: input });
 
   if (type === "error") {
     return (

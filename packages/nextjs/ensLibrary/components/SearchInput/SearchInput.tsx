@@ -1,9 +1,16 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { Dispatch, SetStateAction, useMemo, useRef, useState } from "react";
 import { SearchResult } from "./SearchResult";
+import { useLocalStorage } from "usehooks-ts";
 import { isAddress } from "viem";
 import { useValidate } from "~~/ensLibrary/hooks/useValidate";
 
-export const SearchInput = () => {
+export const SearchInput = ({
+  setSearchItem,
+  nextPage,
+}: {
+  setSearchItem: Dispatch<SetStateAction<string>>;
+  nextPage: () => void;
+}) => {
   const [inputVal, setInputVal] = useState("");
   const [selected, setSelected] = useState(0);
   const [toggle, setToggle] = useState(false);
@@ -63,7 +70,10 @@ export const SearchInput = () => {
     };
   }, [isEmpty, inputIsAddress, isValid, isETH, is2LD, isShort, type]);
 
-  const handleSearch = () => {};
+  const handleSearch = (input: string) => {
+    setSearchItem(input);
+    nextPage();
+  };
 
   const normalisedOutput = useMemo(() => (inputIsAddress ? inputVal : name), [inputIsAddress, inputVal, name]);
 
