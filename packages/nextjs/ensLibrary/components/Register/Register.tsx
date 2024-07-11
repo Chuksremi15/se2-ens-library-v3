@@ -23,7 +23,7 @@ export const Register = ({ searchItem, prevPage }: { searchItem: string; prevPag
 
   return (
     <div>
-      <div className="flex flex-col gap-y-4 py-2 px-6 bg-base-100 w-[500px]  rounded-xl shadow-sm">
+      <div className="flex flex-col gap-y-4 py-2 px-6 bg-base-100 w-full md:w-[500px] lg:w-[500px] rounded-xl shadow-sm">
         <h5 className="text-xl font-medium text-start self-start">Register {searchItem}</h5>
 
         <PlusMinusControl
