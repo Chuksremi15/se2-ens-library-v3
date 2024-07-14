@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { PlusMinusControl } from "./PlusMinusControl";
 import { useEffectOnce } from "usehooks-ts";
 import { useAccount, useChainId } from "wagmi";
+import { useContractAddress } from "~~/ensLibrary/hooks/useContractAddress";
+import { useEstimateFullRegistration } from "~~/ensLibrary/hooks/useEstimateRegistration";
 import useRegistrationReducer from "~~/ensLibrary/hooks/useRegistrationReducer";
 
 export const Register = ({ searchItem, prevPage }: { searchItem: string; prevPage: () => void }) => {
@@ -17,9 +19,30 @@ export const Register = ({ searchItem, prevPage }: { searchItem: string; prevPag
     [address, chainId, searchItem && searchItem],
   );
 
+  const resolverAddress = useContractAddress({ contract: "ensPublicResolver" });
+
   const { item } = useRegistrationReducer(selected);
 
   const [years, setYears] = useState(item.years);
+  let registrationData = item;
+
+  const [reverseRecord, setReverseRecord] = useState(() =>
+    registrationData.started ? registrationData.reverseRecord : false,
+  );
+
+  const fullEstimate = useEstimateFullRegistration({
+    name: searchItem,
+    registrationData: {
+      ...registrationData,
+      reverseRecord,
+      years,
+      records: [{ key: "ETH", value: resolverAddress, type: "addr", group: "address" }],
+      clearRecords: true,
+      resolverAddress,
+    },
+  });
+
+  console.log("fullestimate: ", fullEstimate);
 
   return (
     <div>

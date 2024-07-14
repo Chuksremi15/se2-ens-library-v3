@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { TransactionName, TransactionParameters, createTransactionRequest } from "../flow/transaction-flow/index";
 import { ConnectorClientWithEns } from "../types/ensTransactionTypes";
 import { ConfigWithEns, Prettify } from "../types/types";
@@ -202,7 +202,7 @@ export const estimateGasWithStateOverrideQueryFn =
         ? {}
         : {
             account: {
-              address: "0x673cdcbaDBD4137A627A92123c94D5CDBA05839c3",
+              address: "0x0673cdcbaDBD4137A627A92123c94D5CDBA05839c3",
               type: "json-rpc",
             },
           }),
@@ -224,7 +224,7 @@ export const estimateGasWithStateOverrideQueryFn =
     };
   };
 
-export const useEstimateGasWithStateOverride = async <
+export const useEstimateGasWithStateOverride = <
   const TransactionItems extends TransactionItem[] | readonly TransactionItem[],
 >({
   ...params
@@ -234,10 +234,17 @@ export const useEstimateGasWithStateOverride = async <
   const chainId = useChainId();
   const config = useConfig();
 
-  const query = await estimateGasWithStateOverrideQueryFn(config)(connectorClient)({
-    transactions: params.transactions,
-    chainId: chainId,
-  });
+  const [query, setQuery] = useState<{ reduced: bigint; gasEstimates: bigint[] }>({ reduced: 0n, gasEstimates: [] }); // Replace `any` with the correct type
+  const [queryError, setQueryError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    estimateGasWithStateOverrideQueryFn(config)(connectorClient)({
+      transactions: params.transactions,
+      chainId: chainId,
+    })
+      .then(setQuery)
+      .catch(setQueryError);
+  }, [config, connectorClient, params.transactions, chainId]);
 
   const { data: gasPrice, isLoading: isGasPriceLoading, isFetching: isGasPriceFetching } = useGasPrice();
 
