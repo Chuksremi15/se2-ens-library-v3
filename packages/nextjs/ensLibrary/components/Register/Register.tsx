@@ -1,64 +1,64 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { PrimaryButton, SecondaryButton } from "../Button/Button";
+import { Info } from "../Info/Info";
+import { PageSlider } from "../slider/PageSlider";
+import { FullInvoice } from "./FullInvoice";
 import { PlusMinusControl } from "./PlusMinusControl";
-import { useEffectOnce } from "usehooks-ts";
+import { Registration } from "./Registration";
+import TimerAlert from "./TimerAlert";
+import { useEffectOnce, useLocalStorage } from "usehooks-ts";
+import { stringify } from "viem";
 import { useAccount, useChainId } from "wagmi";
 import { useContractAddress } from "~~/ensLibrary/hooks/useContractAddress";
 import { useEstimateFullRegistration } from "~~/ensLibrary/hooks/useEstimateRegistration";
 import useRegistrationReducer from "~~/ensLibrary/hooks/useRegistrationReducer";
 
-export const Register = ({ searchItem, prevPage }: { searchItem: string; prevPage: () => void }) => {
-  if (!searchItem) {
-    prevPage();
-  }
+export const Register = ({ searchItem, prevPageRoot }: { searchItem: string; prevPageRoot: () => void }) => {
+  // if (!searchItem) {
+  //   prevPage();
+  // }
+
+  const [page, setPage] = useLocalStorage<number>("Registrationpage", 0, {
+    initializeWithValue: false,
+  });
+
+  const maxPage = 3;
+
+  const nextPage = () => {
+    if (page < maxPage) setPage(page + 1);
+    else () => {};
+  };
+  const prevPage = () => {
+    if (page > 0) setPage(page - 1);
+    else () => {};
+  };
 
   const chainId = useChainId();
   const { address } = useAccount();
 
   const selected = useMemo(
-    () => ({ name: searchItem && searchItem, address: address! }),
+    () => ({ name: searchItem && searchItem, address: address!, chainId }),
     [address, chainId, searchItem && searchItem],
   );
 
-  const resolverAddress = useContractAddress({ contract: "ensPublicResolver" });
+  const { state, dispatch, item } = useRegistrationReducer(selected);
 
-  const { item } = useRegistrationReducer(selected);
+  // useEffect(() => {
+  //   localStorage.setItem("registration-status", stringify({ items: [] }));
+  // }, []);
 
-  const [years, setYears] = useState(item.years);
-  let registrationData = item;
+  const components = [
+    <Registration
+      searchItem={searchItem}
+      prevPage={prevPageRoot}
+      nextPage={nextPage}
+      registrationData={item}
+      selected={selected}
+      dispatch={dispatch}
+    />,
+    <Info searchItem={searchItem} prevPage={prevPage} nextPage={nextPage} registrationData={item} />,
+    <TimerAlert searchItem={searchItem} prevPage={prevPage} nextPage={nextPage} />,
+  ];
 
-  const [reverseRecord, setReverseRecord] = useState(() =>
-    registrationData.started ? registrationData.reverseRecord : false,
-  );
-
-  const fullEstimate = useEstimateFullRegistration({
-    name: searchItem,
-    registrationData: {
-      ...registrationData,
-      reverseRecord,
-      years,
-      records: [{ key: "ETH", value: resolverAddress, type: "addr", group: "address" }],
-      clearRecords: true,
-      resolverAddress,
-    },
-  });
-
-  console.log("fullestimate: ", fullEstimate);
-
-  return (
-    <div>
-      <div className="flex flex-col gap-y-4 py-2 px-6 bg-base-100 w-full md:w-[500px] lg:w-[500px] rounded-xl shadow-sm">
-        <h5 className="text-xl font-medium text-start self-start">Register {searchItem}</h5>
-
-        <PlusMinusControl
-          minValue={1}
-          value={years}
-          onChange={e => {
-            const newYears = parseInt(e.target.value);
-            if (!Number.isNaN(newYears)) setYears(newYears);
-          }}
-        />
-        {/* {fullEstimate && <FullInvoice {...fullEstimate} unit={"eth"} />} */}
-      </div>
-    </div>
-  );
+  return <PageSlider>{components[page]}</PageSlider>;
 };

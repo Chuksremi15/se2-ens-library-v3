@@ -76,7 +76,7 @@ export const useEstimateFullRegistration = ({ registrationData, name }: UseEstim
   const totalYearlyFee = yearlyFee || 0n;
 
   return {
-    estimatedGasFee: data,
+    estimatedGasFee: data.gasCost,
     estimatedGasLoading: isLoading || gasPriceLoading,
     yearlyFee,
     totalYearlyFee,

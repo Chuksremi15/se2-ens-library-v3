@@ -25,11 +25,11 @@ export const SearchResult = ({
 
   const { registrationStatus, isLoading, beautifiedName } = useBasicName({ name: input });
 
-  const handleClick = useCallback(() => {
-    if (registrationStatus !== "short") {
+  const handleClick = () => {
+    if (registrationStatus !== "short" && registrationStatus === "available") {
       clickCallback(input);
     }
-  }, [input, clickCallback]);
+  };
 
   if (type === "error") {
     return (

@@ -6,16 +6,16 @@ type Data = RegistrationParameters & { name: string };
 
 const displayItems = ({ name }: Data): TransactionDisplayItem[] => [
   {
-    label: "name",
+    label: "Name",
     value: name,
     type: "name",
   },
   {
-    label: "action",
+    label: "Action",
     value: "Start timer",
   },
   {
-    label: "info",
+    label: "Info",
     value: "Start timer to register name",
   },
 ];

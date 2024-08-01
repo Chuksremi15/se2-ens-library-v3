@@ -6,10 +6,12 @@ import { useValidate } from "~~/ensLibrary/hooks/useValidate";
 
 export const SearchInput = ({
   setSearchItem,
-  nextPage,
+  nextPageRoot,
+  handleSearch,
 }: {
   setSearchItem: Dispatch<SetStateAction<string>>;
-  nextPage: () => void;
+  nextPageRoot: () => void;
+  handleSearch: (input: string) => void;
 }) => {
   const [inputVal, setInputVal] = useState("");
   const [selected, setSelected] = useState(0);
@@ -69,11 +71,6 @@ export const SearchInput = ({
       type: "name",
     };
   }, [isEmpty, inputIsAddress, isValid, isETH, is2LD, isShort, type]);
-
-  const handleSearch = (input: string) => {
-    setSearchItem(input);
-    nextPage();
-  };
 
   const normalisedOutput = useMemo(() => (inputIsAddress ? inputVal : name), [inputIsAddress, inputVal, name]);
 
