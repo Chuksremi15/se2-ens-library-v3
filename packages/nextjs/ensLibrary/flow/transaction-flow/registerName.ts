@@ -8,17 +8,17 @@ type Data = RegistrationParameters;
 
 const displayItems = ({ name, duration }: Data): TransactionDisplayItem[] => [
   {
-    label: "name",
+    label: "Name",
     value: name,
     type: "name",
   },
   {
-    label: "action",
+    label: "Action",
     value: "Register name",
   },
   {
-    label: "duration",
-    value: secondsToYears(duration) > 1 ? "years" : "year",
+    label: "Duration",
+    value: secondsToYears(duration) > 1 ? `${secondsToYears(duration)} years` : `${secondsToYears(duration)} year`,
   },
 ];
 

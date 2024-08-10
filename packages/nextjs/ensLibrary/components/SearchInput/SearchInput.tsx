@@ -2,6 +2,8 @@ import React, { Dispatch, SetStateAction, useMemo, useRef, useState } from "reac
 import { SearchResult } from "./SearchResult";
 import { useLocalStorage } from "usehooks-ts";
 import { isAddress } from "viem";
+import { useGasPrice } from "wagmi";
+import { useEstimateFullRegistration } from "~~/ensLibrary/hooks/useEstimateRegistration";
 import { useValidate } from "~~/ensLibrary/hooks/useValidate";
 
 export const SearchInput = ({
@@ -16,8 +18,6 @@ export const SearchInput = ({
   const [inputVal, setInputVal] = useState("");
   const [selected, setSelected] = useState(0);
   const [toggle, setToggle] = useState(false);
-
-  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const clearInputValue = () => {
     setInputVal("");
@@ -87,7 +87,6 @@ export const SearchInput = ({
           autoCorrect="off"
           spellCheck="false"
           data-testid="search-input-box-fake"
-          ref={searchInputRef}
         />
 
         <div

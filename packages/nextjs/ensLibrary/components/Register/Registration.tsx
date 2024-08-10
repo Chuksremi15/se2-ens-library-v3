@@ -4,7 +4,6 @@ import { FullInvoice } from "./FullInvoice";
 import { PlusMinusControl } from "./PlusMinusControl";
 import { RegistrationReducerAction, RegistrationReducerDataItem } from "./types";
 import { useEffectOnce } from "usehooks-ts";
-import { useAccount, useChainId } from "wagmi";
 import { useContractAddress } from "~~/ensLibrary/hooks/useContractAddress";
 import { useEstimateFullRegistration } from "~~/ensLibrary/hooks/useEstimateRegistration";
 import useRegistrationReducer from "~~/ensLibrary/hooks/useRegistrationReducer";
@@ -49,9 +48,7 @@ export const Registration = ({
   });
 
   const nextPageAction = (newYears: number) => {
-    console.log("years: ", newYears);
     dispatch({ name: "setPricingData", payload: { years: newYears, reverseRecord }, selected });
-    console.log("registrationData: ", registrationData);
   };
 
   const resetItem = () => {
@@ -62,7 +59,7 @@ export const Registration = ({
   return (
     <div>
       <div className="flex flex-col gap-y-4 pt-4 pb-5 px-6 bg-base-100 w-full md:w-[500px] lg:w-[500px] rounded-xl shadow-sm">
-        <h5 className="text-xl font-medium text-start self-start">Register {searchItem}</h5>
+        <h5 className="text-xl font-medium text-start self-start">Register {registrationData.name}</h5>
 
         <PlusMinusControl
           minValue={1}

@@ -244,7 +244,7 @@ export const useEstimateGasWithStateOverride = <
     })
       .then(setQuery)
       .catch(setQueryError);
-  }, [config, connectorClient, params.transactions, chainId]);
+  }, [config, connectorClient, chainId]);
 
   const { data: gasPrice, isLoading: isGasPriceLoading, isFetching: isGasPriceFetching } = useGasPrice();
 

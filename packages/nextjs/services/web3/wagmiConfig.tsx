@@ -1,5 +1,5 @@
 import { wagmiConnectors } from "./wagmiConnectors";
-import { Chain, HttpTransport, createClient, http } from "viem";
+import { Chain, HttpTransport, Transport, createClient, http } from "viem";
 import { goerli, hardhat, holesky, mainnet, sepolia } from "viem/chains";
 import { createConfig, fallback } from "wagmi";
 import { goerliWithEns, holeskyWithEns, mainnetWithEns, sepoliaWithEns } from "~~/ensLibrary/constants/chains";
@@ -20,7 +20,7 @@ const wagmiConfig_ = createConfig({
   connectors: wagmiConnectors,
   ssr: true,
   client({ chain }) {
-    return createClient({
+    return createClient<Transport, typeof chain>({
       chain,
       transport: http(getAlchemyHttpUrl(chain.id)),
       ...(chain.id !== (hardhat as Chain).id

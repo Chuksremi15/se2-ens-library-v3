@@ -5,8 +5,6 @@ import { SearchItemType } from "./SearchInputTypes";
 import { useBasicName } from "~~/ensLibrary/hooks/useBasicName";
 import { RegistrationStatus } from "~~/ensLibrary/utils/registrationStatus";
 
-// import { useBasicName } from "~~/hooks/ens-hook/useBasicName";
-
 export const SearchResult = ({
   value,
   type,

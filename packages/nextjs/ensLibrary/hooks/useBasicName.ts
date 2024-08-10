@@ -120,7 +120,6 @@ export const useBasicName = ({
   return {
     ...validation,
     normalisedName,
-
     wrapperData,
     priceData,
     expiryDate,

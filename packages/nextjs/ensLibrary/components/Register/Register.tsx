@@ -57,7 +57,7 @@ export const Register = ({ searchItem, prevPageRoot }: { searchItem: string; pre
       dispatch={dispatch}
     />,
     <Info searchItem={searchItem} prevPage={prevPage} nextPage={nextPage} registrationData={item} />,
-    <TimerAlert searchItem={searchItem} prevPage={prevPage} nextPage={nextPage} />,
+    <TimerAlert searchItem={searchItem} prevPage={prevPage} nextPage={nextPage} registrationData={item} />,
   ];
 
   return <PageSlider>{components[page]}</PageSlider>;

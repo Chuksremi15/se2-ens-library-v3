@@ -16,7 +16,7 @@ const displayItems = ({ name }: Data): TransactionDisplayItem[] => [
   },
   {
     label: "Info",
-    value: "Start timer to register name",
+    value: "Start timer to commit name",
   },
 ];
 

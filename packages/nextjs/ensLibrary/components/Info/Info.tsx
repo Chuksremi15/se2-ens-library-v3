@@ -48,7 +48,7 @@ export const Info = ({
     <div>
       <div className="flex flex-col gap-y-4 pt-2 pb-4 px-6 bg-base-100 w-full md:w-[500px] lg:w-[500px] rounded-xl shadow-sm">
         <div>
-          <h5 className="text-xl font-medium text-startself-start"> {searchItem}</h5>
+          <h5 className="text-xl font-medium text-startself-start"> {registrationData.name}</h5>
           <h5 className="text-2xl font-medium text-center">Before we start</h5>
           <h5 className="text-xs font-medium text-center">Registering your name takes three steps</h5>
 
