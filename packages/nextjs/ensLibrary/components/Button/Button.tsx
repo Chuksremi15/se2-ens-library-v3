@@ -13,7 +13,7 @@ export const PrimaryButton = ({
 }) => {
   return (
     <div
-      onClick={action}
+      onClick={loading ? () => {} : action}
       className={`py-2 w-[${btnWidth}] btn btn-primary flex items-centern justify-center text-center text-sm rounded-xl font-body font-medium cursor-pointer`}
     >
       {!loading ? text : <span className="loading loading-spinner loading-sm"></span>}
@@ -31,7 +31,7 @@ export const SecondaryButton = ({
 }) => {
   return (
     <div
-      onClick={action}
+      onClick={loading ? () => {} : action}
       className="py-2 w-[150px] btn btn-secondary flex items-centern justify-center text-center text-sm rounded-xl font-body font-medium cursor-pointer"
     >
       {!loading ? text : <span className="loading loading-spinner loading-sm"></span>}
@@ -50,7 +50,7 @@ export const BackButton = ({
 }) => {
   return (
     <div
-      onClick={action}
+      onClick={loading ? () => {} : action}
       className="py-2 w-[100px] btn border-none bg-red-100 text-red-600 hover:bg-red-200 flex items-centern justify-center text-center text-sm rounded-xl font-body font-medium cursor-pointer"
     >
       {!loading ? text : <span className="loading loading-spinner loading-sm"></span>}
@@ -62,15 +62,18 @@ export const OpenModalBtn = ({
   text,
   modalId,
   loading = false,
+  action,
 }: {
   modalId: string;
   text: string;
   loading?: boolean;
+  action: () => void;
 }) => {
   return (
     <label
       htmlFor={modalId}
       className="py-2 w-[150px] btn btn-primary flex items-centern justify-center text-center text-sm rounded-xl font-body font-medium cursor-pointer"
+      onClick={loading ? () => {} : action}
     >
       {!loading ? text : <span className="loading loading-spinner loading-sm"></span>}
     </label>

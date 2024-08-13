@@ -1,45 +1,42 @@
-import React, { ReactElement, useEffect, useMemo, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { PrimaryButton } from "../Button/Button";
 import { RegistrationReducerDataItem } from "./types";
 import { RegistrationParameters } from "@ensdomains/ensjs/utils";
-import { commitName } from "@ensdomains/ensjs/wallet";
 import { queryOptions, useQuery } from "@tanstack/react-query";
-import { getPublicClient, getWalletClient } from "@wagmi/core";
-import { createWalletClient } from "viem";
-import { useAccount, useChainId, useClient, useConfig, useConnectorClient } from "wagmi";
-import { Connector, useConnect } from "wagmi";
+import { getPublicClient } from "@wagmi/core";
+import { useAccount, useChainId, useConnectorClient, useSendTransaction } from "wagmi";
 import { WalletIcon } from "@heroicons/react/24/outline";
 import { RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
-import getCommitNameDisplay from "~~/ensLibrary/flow/transaction-flow/commitName";
+import { transactions } from "~~/ensLibrary/flow/transaction-flow";
 import { useQueryOptions } from "~~/ensLibrary/hooks/useQueryOptions";
 import useRegistrationParams from "~~/ensLibrary/hooks/useRegistrationParams";
 import { ConfigWithEns } from "~~/ensLibrary/types/types";
 import { yearsToSeconds } from "~~/ensLibrary/utils/ensUtils";
 import { createTransactionRequestQueryFn, getUniqueTransaction } from "~~/ensLibrary/utils/query";
-import { useTransactor } from "~~/hooks/scaffold-eth";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
+import { getBlockExplorerTxLink, getParsedError, notification } from "~~/utils/scaffold-eth";
 
 const ConfirmTrxDetails = ({
   registrationData,
   setStartTimer,
+  transactioName,
+  setIsModalOpen,
 }: {
   registrationData: RegistrationReducerDataItem;
   setStartTimer: React.Dispatch<React.SetStateAction<boolean>>;
+  transactioName: "commitName" | "registerName";
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const { address, isConnected } = useAccount();
-  const config = useConfig();
+  const chainId = useChainId();
+  const publicClient = getPublicClient(wagmiConfig);
+  const { isConnected } = useAccount();
   const { data: connectorClient } = useConnectorClient<ConfigWithEns>();
-  const commitNameTrx = useTransactor();
-
-  const [commitNameLoading, setCommitNameLoading] = useState<boolean>(false);
 
   const registrationParams = useRegistrationParams({
     name: registrationData.name,
     owner: registrationData.address!,
     registrationData,
   });
-
-  const transactionInfo = getCommitNameDisplay.displayItems(registrationParams);
 
   const params: RegistrationParameters = {
     name: registrationData.name,
@@ -48,29 +45,102 @@ const ConfirmTrxDetails = ({
     secret: registrationData.secret as `0x${string}`,
   };
 
-  const commitUserName = async () => {
-    try {
-      setCommitNameLoading(true);
+  const transaction = getUniqueTransaction({
+    name: transactioName,
+    data: params,
+  });
 
-      const client = await getWalletClient(config, {
-        account: address,
-      });
+  const transactionInfo = transactions[transactioName].displayItems(registrationParams);
 
-      const transactionHashh = commitName.makeFunctionData(client, params);
+  const initialOptions = useQueryOptions({
+    params: transaction,
+    functionName: "createTransactionRequest",
+    queryDependencyType: "standard",
+    queryFn: createTransactionRequestQueryFn,
+  });
 
-      //await commitNameTrx(transactionHashh);
+  const isSafeApp = true;
 
-      // const transactionHash = await commitName(client, { ...params, account: registrationData.address });
-      triggerCheckboxClick();
+  const preparedOptions = queryOptions({
+    queryKey: initialOptions.queryKey,
+    queryFn: initialOptions.queryFn({ connectorClient, isSafeApp }),
+  });
 
-      setStartTimer(true);
+  const transactionRequestQuery = useQuery({
+    ...preparedOptions,
+    enabled: true,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+  });
 
-      setCommitNameLoading(false);
-    } catch (error) {
-      console.log(error);
-      setCommitNameLoading(false);
-    }
+  const { data: request, isLoading: requestLoading, error: requestError } = transactionRequestQuery;
+
+  console.log("request error: ", requestError);
+  console.log("request: ", request);
+
+  const [notificationId, setNotificationId] = useState<string>("");
+
+  /**
+   * Custom notification content for TXs.
+   */
+  const TxnNotification = ({ message, blockExplorerLink }: { message: string; blockExplorerLink?: string }) => {
+    return (
+      <div className={`flex flex-col ml-1 cursor-default`}>
+        <p className="my-0">{message}</p>
+        {blockExplorerLink && blockExplorerLink.length > 0 ? (
+          <a href={blockExplorerLink} target="_blank" rel="noreferrer" className="block link text-md">
+            check out transaction
+          </a>
+        ) : null}
+      </div>
+    );
   };
+
+  const {
+    isPending: transactionLoading,
+    error: transactionError,
+    sendTransaction,
+    isSuccess: transactionSuccess,
+  } = useSendTransaction({
+    mutation: {
+      onSuccess: async data => {
+        notification.remove(notificationId);
+
+        const transactionHash = data;
+        const blockExplorerTxURL = chainId ? getBlockExplorerTxLink(chainId, transactionHash) : "";
+
+        const waitingForTrxNotificationId = notification.loading(
+          <TxnNotification message="Waiting for transaction to complete." blockExplorerLink={blockExplorerTxURL} />,
+        );
+
+        const transactionReceipt = await publicClient.waitForTransactionReceipt({
+          hash: transactionHash,
+        });
+
+        notification.remove(waitingForTrxNotificationId);
+
+        notification.success(
+          <TxnNotification message="Transaction completed successfully!" blockExplorerLink={blockExplorerTxURL} />,
+          {
+            icon: "🎉",
+          },
+        );
+
+        setStartTimer(true);
+        setIsModalOpen(false);
+        triggerCheckboxClick();
+      },
+      onMutate: async data => {
+        setNotificationId(notification.loading(<TxnNotification message="Awaiting for user confirmation" />));
+      },
+
+      onError: async data => {
+        notification.remove(notificationId);
+        const message = getParsedError(data);
+        notification.error(message);
+      },
+    },
+  });
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -81,7 +151,7 @@ const ConfirmTrxDetails = ({
   };
 
   return (
-    <>
+    <div>
       <input ref={inputRef} type="checkbox" id={`transaction-modal`} className="modal-toggle" />
 
       <label htmlFor={`transaction-modal`} className="modal cursor-pointer">
@@ -114,11 +184,8 @@ const ConfirmTrxDetails = ({
             <div className="px-3 mt-5">
               {isConnected ? (
                 <PrimaryButton
-                  loading={commitNameLoading}
-                  action={() => {
-                    commitUserName();
-                  }}
-                  //action={triggerCheckboxClick}
+                  loading={transactionLoading || requestLoading}
+                  action={() => sendTransaction(request!)}
                   text={"Open wallet"}
                   btnWidth="100%"
                 />
@@ -131,7 +198,7 @@ const ConfirmTrxDetails = ({
           </div>
         </label>
       </label>
-    </>
+    </div>
   );
 };
 
