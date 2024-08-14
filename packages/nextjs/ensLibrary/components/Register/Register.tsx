@@ -3,6 +3,7 @@ import { PrimaryButton, SecondaryButton } from "../Button/Button";
 import { Info } from "../Info/Info";
 import { PageSlider } from "../slider/PageSlider";
 import { FullInvoice } from "./FullInvoice";
+import { MyNames } from "./MyNames";
 import { PlusMinusControl } from "./PlusMinusControl";
 import { Registration } from "./Registration";
 import TimerAlert from "./TimerAlert";
@@ -57,7 +58,8 @@ export const Register = ({ searchItem, prevPageRoot }: { searchItem: string; pre
       dispatch={dispatch}
     />,
     <Info searchItem={searchItem} prevPage={prevPage} nextPage={nextPage} registrationData={item} />,
-    <TimerAlert searchItem={searchItem} prevPage={prevPage} nextPage={nextPage} registrationData={item} />,
+    <TimerAlert prevPage={prevPage} nextPage={nextPage} registrationData={item} />,
+    <MyNames registrationData={item} />,
   ];
 
   return <PageSlider>{components[page]}</PageSlider>;

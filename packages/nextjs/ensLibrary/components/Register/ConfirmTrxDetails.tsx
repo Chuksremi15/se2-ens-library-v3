@@ -16,16 +16,27 @@ import { createTransactionRequestQueryFn, getUniqueTransaction } from "~~/ensLib
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 import { getBlockExplorerTxLink, getParsedError, notification } from "~~/utils/scaffold-eth";
 
+const TxnNotification = ({ message, blockExplorerLink }: { message: string; blockExplorerLink?: string }) => {
+  return (
+    <div className={`flex flex-col ml-1 cursor-default`}>
+      <p className="my-0">{message}</p>
+      {blockExplorerLink && blockExplorerLink.length > 0 ? (
+        <a href={blockExplorerLink} target="_blank" rel="noreferrer" className="block link text-md">
+          check out transaction
+        </a>
+      ) : null}
+    </div>
+  );
+};
+
 const ConfirmTrxDetails = ({
   registrationData,
-  setStartTimer,
   transactioName,
-  setIsModalOpen,
+  onSuccessFn,
 }: {
   registrationData: RegistrationReducerDataItem;
-  setStartTimer: React.Dispatch<React.SetStateAction<boolean>>;
   transactioName: "commitName" | "registerName";
-  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onSuccessFn: () => void;
 }) => {
   const chainId = useChainId();
   const publicClient = getPublicClient(wagmiConfig);
@@ -80,28 +91,7 @@ const ConfirmTrxDetails = ({
 
   const [notificationId, setNotificationId] = useState<string>("");
 
-  /**
-   * Custom notification content for TXs.
-   */
-  const TxnNotification = ({ message, blockExplorerLink }: { message: string; blockExplorerLink?: string }) => {
-    return (
-      <div className={`flex flex-col ml-1 cursor-default`}>
-        <p className="my-0">{message}</p>
-        {blockExplorerLink && blockExplorerLink.length > 0 ? (
-          <a href={blockExplorerLink} target="_blank" rel="noreferrer" className="block link text-md">
-            check out transaction
-          </a>
-        ) : null}
-      </div>
-    );
-  };
-
-  const {
-    isPending: transactionLoading,
-    error: transactionError,
-    sendTransaction,
-    isSuccess: transactionSuccess,
-  } = useSendTransaction({
+  const { isPending: transactionLoading, sendTransaction } = useSendTransaction({
     mutation: {
       onSuccess: async data => {
         notification.remove(notificationId);
@@ -126,8 +116,8 @@ const ConfirmTrxDetails = ({
           },
         );
 
-        setStartTimer(true);
-        setIsModalOpen(false);
+        onSuccessFn();
+
         triggerCheckboxClick();
       },
       onMutate: async data => {
@@ -137,7 +127,7 @@ const ConfirmTrxDetails = ({
       onError: async data => {
         notification.remove(notificationId);
         const message = getParsedError(data);
-        notification.error(message);
+        notification.error(message, { duration: 5000 });
       },
     },
   });

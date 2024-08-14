@@ -6,20 +6,14 @@ import { useTheme } from "next-themes";
 import { CheckIcon } from "@heroicons/react/20/solid";
 
 export const TimerAlert = ({
-  searchItem,
   prevPage,
   nextPage,
   registrationData,
 }: {
-  searchItem: string;
   prevPage: () => void;
   nextPage: () => void;
   registrationData: RegistrationReducerDataItem;
 }) => {
-  if (!searchItem) {
-    prevPage();
-  }
-
   const [isRegisterNameModalOpen, setRegisterNameModalOpen] = useState<boolean>(false);
   const [isCommitNameModalOpen, setCommitNameModalOpen] = useState<boolean>(false);
 
@@ -33,22 +27,29 @@ export const TimerAlert = ({
     setRegisterNameModalOpen(true);
   };
 
+  const onCommitNameSuccess = () => {
+    setStartTimer(true);
+    setCommitNameModalOpen(false);
+  };
+  const onRegisterNameSuccess = () => {
+    setRegisterNameModalOpen(false);
+    nextPage();
+  };
+
   return (
     <div>
       {isCommitNameModalOpen && (
         <ConfirmTrxDetails
           transactioName={"commitName"}
           registrationData={registrationData}
-          setStartTimer={setStartTimer}
-          setIsModalOpen={setCommitNameModalOpen}
+          onSuccessFn={onCommitNameSuccess}
         />
       )}
       {isRegisterNameModalOpen && (
         <ConfirmTrxDetails
           transactioName={"registerName"}
           registrationData={registrationData}
-          setStartTimer={setStartTimer}
-          setIsModalOpen={setRegisterNameModalOpen}
+          onSuccessFn={onRegisterNameSuccess}
         />
       )}
 
