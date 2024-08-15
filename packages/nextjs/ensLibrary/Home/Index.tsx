@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { MyNames } from "../components/Register/MyNames";
 import { Register } from "../components/Register/Register";
 import { SearchInput } from "../components/SearchInput/SearchInput";
@@ -9,10 +9,12 @@ import { useAccount } from "wagmi";
 const burnerStorageKey = "scaffoldEth2.burnerWallet.sk";
 
 const EnsSe2 = () => {
+  const [isLoading, setIsLoading] = useState(true); // Loading state
+
   const [page, setPage] = useLocalStorage<number>("page", 0, {
     initializeWithValue: false,
   });
-  const [searchItem, setSearchItem] = useLocalStorage<string>(burnerStorageKey, "", {
+  const [searchItem, setSearchItem] = useLocalStorage<string>(burnerStorageKey, "ens", {
     initializeWithValue: false,
   });
 
@@ -32,17 +34,11 @@ const EnsSe2 = () => {
     else () => {};
   };
 
-  // useEffect(() => {
-  //   window.addEventListener("unload", handlesCompUnload);
-
-  //   return () => {
-  //     window.removeEventListener("unload", handlesCompUnload);
-  //   };
-  // }, []);
-
-  // const handlesCompUnload = () => {
-  //   setPage(0);
-  // };
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, []);
 
   const handleSearch = (input: string) => {
     setSearchItem(input);
@@ -60,7 +56,11 @@ const EnsSe2 = () => {
   return (
     <>
       <div className="flex items-center flex-col flex-grow pt-4">
-        {!searchItem ? <>...loading</> : <PageSlider>{components[page]}</PageSlider>}
+        {isLoading ? (
+          <span className="loading loading-spinner loading-sm" />
+        ) : (
+          <PageSlider>{components[page]}</PageSlider>
+        )}
       </div>
     </>
   );

@@ -2,6 +2,7 @@ import { SupportedChain } from "../constants/chains";
 import { ConfigWithEns, CreateQueryKey, QueryDependencyType } from "../types/types";
 import { Address } from "viem";
 import { useAccount, useChainId, useConfig } from "wagmi";
+import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 
 export type QueryKeyConfig<
   TParams extends {},
@@ -145,7 +146,12 @@ export function useQueryOptions<
 }: QueryKeyConfig<TParams, TFunctionName, QueryDependencyType> & { queryFn?: TQueryFn }) {
   const chainId = useChainId();
   const { address } = useAccount();
-  const config = useConfig();
+  const config = useConfig({ config: wagmiConfig });
+
+  const filterchainId = (): 1 | 5 | 17000 | 11155111 => {
+    if (chainId === 1 || chainId === 5 || chainId === 17000 || chainId === 11155111) return chainId;
+    return 1;
+  };
 
   if (queryDependencyType === "independent")
     return {
@@ -158,7 +164,7 @@ export function useQueryOptions<
   if (queryDependencyType === "graph")
     return {
       queryKey: createQueryKey({
-        chainId,
+        chainId: filterchainId(),
         address,
         params,
         scopeKey,
@@ -170,7 +176,7 @@ export function useQueryOptions<
 
   return {
     queryKey: createQueryKey({
-      chainId,
+      chainId: filterchainId(),
       address,
       params,
       scopeKey,

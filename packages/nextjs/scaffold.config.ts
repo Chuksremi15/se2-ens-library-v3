@@ -1,16 +1,10 @@
-// import * as chains from "viem/chains";
-import { mainnet } from "viem/chains";
+import * as chains from "viem/chains";
 import { goerliWithEns, holeskyWithEns, mainnetWithEns, sepoliaWithEns } from "~~/ensLibrary/constants/chains";
 
-const chains = [mainnetWithEns, goerliWithEns, sepoliaWithEns, holeskyWithEns] as const;
+[mainnetWithEns, goerliWithEns, sepoliaWithEns, holeskyWithEns] as const;
 
 export type ScaffoldConfig = {
-  targetNetworks: readonly (
-    | typeof mainnetWithEns
-    | typeof goerliWithEns
-    | typeof sepoliaWithEns
-    | typeof holeskyWithEns
-  )[];
+  targetNetworks: readonly chains.Chain[];
   pollingInterval: number;
   alchemyApiKey: string;
   walletConnectProjectId: string;
@@ -21,7 +15,7 @@ export type ScaffoldConfig = {
 
 const scaffoldConfig = {
   // The networks on which your DApp is live
-  targetNetworks: [mainnetWithEns, goerliWithEns, sepoliaWithEns, holeskyWithEns],
+  targetNetworks: [chains.polygon, mainnetWithEns, goerliWithEns, sepoliaWithEns, holeskyWithEns],
 
   // The interval at which your front-end polls the RPC servers for new data
   // it has no effect if you only target the local network (default is 4000)

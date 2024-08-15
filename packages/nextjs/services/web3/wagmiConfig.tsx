@@ -15,7 +15,7 @@ const { targetNetworks } = scaffoldConfig;
 
 //const chains = [mainnetWithEns, goerliWithEns, sepoliaWithEns, holeskyWithEns] as const;
 
-const wagmiConfig_ = createConfig({
+export const wagmiConfig = createConfig({
   chains: targetNetworks,
   connectors: wagmiConnectors,
   ssr: true,
@@ -32,12 +32,12 @@ const wagmiConfig_ = createConfig({
   },
 });
 
-export const wagmiConfig = wagmiConfig_ as typeof wagmiConfig_ & {
-  _isEns: true;
-};
+// export const wagmiConfig = wagmiConfig_ as typeof wagmiConfig_ & {
+//   _isEns: true;
+// };
 
-declare module "wagmi" {
-  interface Register {
-    config: typeof wagmiConfig;
-  }
-}
+// declare module "wagmi" {
+//   interface Register {
+//     config: typeof wagmiConfig;
+//   }
+// }

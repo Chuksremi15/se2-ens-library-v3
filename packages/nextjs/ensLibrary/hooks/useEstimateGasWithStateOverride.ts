@@ -229,10 +229,17 @@ export const useEstimateGasWithStateOverride = <
 >({
   ...params
 }: UseEstimateGasWithStateOverrideParameters<TransactionItems>) => {
-  const { data: connectorClient, isLoading: isConnectorLoading } = useConnectorClient<ConfigWithEns>();
-
   const chainId = useChainId();
-  const config = useConfig();
+  let config = useConfig();
+
+  const filterchainId = (): 1 | 5 | 17000 | 11155111 => {
+    if (chainId === 1 || chainId === 5 || chainId === 17000 || chainId === 11155111) return chainId;
+    return 1;
+  };
+
+  const { data: connectorClient, isLoading: isConnectorLoading } = useConnectorClient<ConfigWithEns>({
+    chainId: filterchainId(),
+  });
 
   const [query, setQuery] = useState<{ reduced: bigint; gasEstimates: bigint[] }>({ reduced: 0n, gasEstimates: [] }); // Replace `any` with the correct type
   const [queryError, setQueryError] = useState<Error | null>(null);
@@ -240,7 +247,7 @@ export const useEstimateGasWithStateOverride = <
   useEffect(() => {
     estimateGasWithStateOverrideQueryFn(config)(connectorClient)({
       transactions: params.transactions,
-      chainId: chainId,
+      chainId: filterchainId(),
     })
       .then(setQuery)
       .catch(setQueryError);
