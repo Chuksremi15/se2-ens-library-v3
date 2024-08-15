@@ -9,10 +9,14 @@ export const TimerAlert = ({
   prevPage,
   nextPage,
   registrationData,
+  gotoPage,
+  gotoPageRoot,
 }: {
   prevPage: () => void;
   nextPage: () => void;
   registrationData: RegistrationReducerDataItem;
+  gotoPage: (pageNumber: number) => void;
+  gotoPageRoot: (pageNumber: number) => void;
 }) => {
   const [isRegisterNameModalOpen, setRegisterNameModalOpen] = useState<boolean>(false);
   const [isCommitNameModalOpen, setCommitNameModalOpen] = useState<boolean>(false);
@@ -33,7 +37,8 @@ export const TimerAlert = ({
   };
   const onRegisterNameSuccess = () => {
     setRegisterNameModalOpen(false);
-    nextPage();
+    gotoPage(0);
+    gotoPageRoot(2);
   };
 
   return (

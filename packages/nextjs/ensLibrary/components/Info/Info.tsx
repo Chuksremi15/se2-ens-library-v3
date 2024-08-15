@@ -8,20 +8,14 @@ import { useEstimateFullRegistration } from "~~/ensLibrary/hooks/useEstimateRegi
 import useRegistrationReducer from "~~/ensLibrary/hooks/useRegistrationReducer";
 
 export const Info = ({
-  searchItem,
   prevPage,
   nextPage,
   registrationData,
 }: {
-  searchItem: string;
   prevPage: () => void;
   nextPage: () => void;
   registrationData: RegistrationReducerDataItem;
 }) => {
-  if (!searchItem) {
-    prevPage();
-  }
-
   const resolverAddress = useContractAddress({ contract: "ensPublicResolver" });
 
   const [reverseRecord, setReverseRecord] = useState(() =>
@@ -29,7 +23,7 @@ export const Info = ({
   );
 
   const fullEstimate = useEstimateFullRegistration({
-    name: searchItem,
+    name: registrationData.name,
     registrationData: {
       ...registrationData,
       reverseRecord,

@@ -8,7 +8,7 @@ import { useContractAddress } from "~~/ensLibrary/hooks/useContractAddress";
 import { useEstimateFullRegistration } from "~~/ensLibrary/hooks/useEstimateRegistration";
 import useRegistrationReducer from "~~/ensLibrary/hooks/useRegistrationReducer";
 
-export const MyNames = ({ registrationData }: { registrationData: RegistrationReducerDataItem }) => {
+export const MyNames = ({ gotoPageRoot }: { gotoPageRoot: (pageNumber: number) => void }) => {
   const { address } = useAccount();
 
   const { data: addressNames, isLoading } = useAddressNames({ address: address as string });
@@ -16,8 +16,22 @@ export const MyNames = ({ registrationData }: { registrationData: RegistrationRe
   return (
     <div>
       <div className="flex flex-col gap-y-4 pt-2 pb-4 px-6 bg-base-100 w-full md:w-[500px] lg:w-[500px] rounded-xl shadow-sm">
-        <div>
-          <h5 className="text-xl font-medium text-startself-start">Names</h5>
+        <div className="flex justify-between items-baseline">
+          <h5 className="text-xl font-medium text-startself-start">My Names</h5>
+          <div
+            onClick={() => gotoPageRoot(0)}
+            className="flex text-gray-500 hover:text-blue-500  gap-x-1 cursor-pointer mt-3 transition-all duration-200"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+              <path
+                fill-rule="evenodd"
+                d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+
+            <div>Search for a name</div>
+          </div>
         </div>
 
         <div>
@@ -46,10 +60,6 @@ export const MyNames = ({ registrationData }: { registrationData: RegistrationRe
               </div>
             ))
           )}
-        </div>
-
-        <div className="flex items-center justify-center gap-x-2 ">
-          <PrimaryButton text="Go Home" />
         </div>
       </div>
     </div>

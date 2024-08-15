@@ -14,7 +14,15 @@ import { useContractAddress } from "~~/ensLibrary/hooks/useContractAddress";
 import { useEstimateFullRegistration } from "~~/ensLibrary/hooks/useEstimateRegistration";
 import useRegistrationReducer from "~~/ensLibrary/hooks/useRegistrationReducer";
 
-export const Register = ({ searchItem, prevPageRoot }: { searchItem: string; prevPageRoot: () => void }) => {
+export const Register = ({
+  searchItem,
+  prevPageRoot,
+  gotoPageRoot,
+}: {
+  searchItem: string;
+  prevPageRoot: () => void;
+  gotoPageRoot: (pageNumber: number) => void;
+}) => {
   // if (!searchItem) {
   //   prevPage();
   // }
@@ -23,14 +31,19 @@ export const Register = ({ searchItem, prevPageRoot }: { searchItem: string; pre
     initializeWithValue: false,
   });
 
-  const maxPage = 3;
+  const maxPage = 2;
 
   const nextPage = () => {
-    if (page < maxPage) setPage(page + 1);
+    if (page <= maxPage) setPage(page + 1);
     else () => {};
   };
   const prevPage = () => {
     if (page > 0) setPage(page - 1);
+    else () => {};
+  };
+
+  const gotoPage = (pageNumber: number) => {
+    if (pageNumber <= maxPage && pageNumber >= 0) setPage(pageNumber);
     else () => {};
   };
 
@@ -57,9 +70,14 @@ export const Register = ({ searchItem, prevPageRoot }: { searchItem: string; pre
       selected={selected}
       dispatch={dispatch}
     />,
-    <Info searchItem={searchItem} prevPage={prevPage} nextPage={nextPage} registrationData={item} />,
-    <TimerAlert prevPage={prevPage} nextPage={nextPage} registrationData={item} />,
-    <MyNames registrationData={item} />,
+    <Info prevPage={prevPage} nextPage={nextPage} registrationData={item} />,
+    <TimerAlert
+      gotoPage={gotoPage}
+      gotoPageRoot={gotoPageRoot}
+      prevPage={prevPage}
+      nextPage={nextPage}
+      registrationData={item}
+    />,
   ];
 
   return <PageSlider>{components[page]}</PageSlider>;

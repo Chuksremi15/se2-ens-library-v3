@@ -7,17 +7,13 @@ import { useEstimateFullRegistration } from "~~/ensLibrary/hooks/useEstimateRegi
 import { useValidate } from "~~/ensLibrary/hooks/useValidate";
 
 export const SearchInput = ({
-  setSearchItem,
-  nextPageRoot,
   handleSearch,
+  gotoPageRoot,
 }: {
-  setSearchItem: Dispatch<SetStateAction<string>>;
-  nextPageRoot: () => void;
   handleSearch: (input: string) => void;
+  gotoPageRoot: (pageNumber: number) => void;
 }) => {
   const [inputVal, setInputVal] = useState("");
-  const [selected, setSelected] = useState(0);
-  const [toggle, setToggle] = useState(false);
 
   const clearInputValue = () => {
     setInputVal("");
@@ -76,6 +72,19 @@ export const SearchInput = ({
 
   return (
     <div className="flex flex-col items-center gap-y-2">
+      <div
+        onClick={() => gotoPageRoot(2)}
+        className="flex self-end gap-x-0.5 text-gray-500 hover:text-blue-500  cursor-pointer "
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+          <path
+            fillRule="evenodd"
+            d="M3 6a3 3 0 0 1 3-3h2.25a3 3 0 0 1 3 3v2.25a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6Zm9.75 0a3 3 0 0 1 3-3H18a3 3 0 0 1 3 3v2.25a3 3 0 0 1-3 3h-2.25a3 3 0 0 1-3-3V6ZM3 15.75a3 3 0 0 1 3-3h2.25a3 3 0 0 1 3 3V18a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-2.25Zm9.75 0a3 3 0 0 1 3-3H18a3 3 0 0 1 3 3V18a3 3 0 0 1-3 3h-2.25a3 3 0 0 1-3-3v-2.25Z"
+            clipRule="evenodd"
+          />
+        </svg>
+        My Names
+      </div>
       <div className="flex items-center w-[350px] relative">
         <input
           className="input rounded-xl h-14 focus:outline-0 focus:border-blue-300 w-[350px] mx-auto  focus:text-lg  pl-4 pr-12 border   placeholder:text-lg  transition-all duration-300"
