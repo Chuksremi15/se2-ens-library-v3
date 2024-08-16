@@ -16,6 +16,8 @@ export const NetworkOptions = ({ hidden = false }: NetworkOptionsProps) => {
   const { resolvedTheme } = useTheme();
   const isDarkMode = resolvedTheme === "dark";
 
+  chain && (chain.id === 1 || chain.id === 5 || chain.id === 17000 || chain.id === 11155111);
+
   return (
     <>
       {allowedNetworks
