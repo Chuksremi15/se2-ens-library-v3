@@ -4,7 +4,7 @@ module.exports = {
     "./app/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
     "./utils/**/*.{js,ts,jsx,tsx}",
-    "./enslibrary/**/*.{js,ts,jsx,tsx}",
+    "./ensLibrary/**/*.{js,ts,jsx,tsx}",
   ],
   plugins: [require("daisyui")],
   darkTheme: "dark",
